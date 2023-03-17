@@ -13,4 +13,10 @@ class BlogPost extends Model
     //protected $primaryKey = "blog_id";
     //$timestamp = false
 
+    protected $fillable = [
+        'title',
+        'body',
+        'user_id'
+    ];
+
 }
