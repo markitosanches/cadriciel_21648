@@ -9,6 +9,15 @@
 </head>
 <body>
     <div class="container">
+        @if(session('success'))
+        <div class="row justify-content-center mt-2 mb-1">
+            <div class="col-md-6">
+                <div class="alert alert-success alert-dismissible fade show">{{ session('success')}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+        @endif
         @yield('content')
     </div>
 </body>
