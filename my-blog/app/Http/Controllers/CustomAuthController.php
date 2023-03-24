@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class CustomAuthController extends Controller
 {
@@ -14,7 +16,7 @@ class CustomAuthController extends Controller
      */
     public function index()
     {
-        //
+        return view('auth.index');
     }
 
     /**
@@ -37,23 +39,27 @@ class CustomAuthController extends Controller
     {
         //return $request;
         $request->validate([
-            'name' => 'required|max:25',
-            'email' => 'required|email',
-            'password' => 'min:6|max:20'
-        ]);
+                'name' => 'required|max:25',
+                'email' => 'required|email|unique:users',
+                'password' => 'min:6|max:20'
+            ],
+            [
+                'name.required' => 'Custom Message' 
+            ]);
 
         //if false  return redirect()->back()->withErrors(validation)->withInput()
+        
 
         $user = new User;
         $user->fill($request->all()); //insert into users (name, email, password) values (....);
+        $user->password = Hash::make($request->password);
         $user->save();
 
         //user->fill TABLE USER col (name, email, password, reset_pass)
         //requestAll (inputs) ( name,  password, email, _token)
 
 
-        return "ABC";
-
+        return redirect(route('blog.index'))->withSuccess('User registered');
     }
 
     /**
@@ -99,5 +105,12 @@ class CustomAuthController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+
+    public function authentication(Request $request){
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
     }
 }
