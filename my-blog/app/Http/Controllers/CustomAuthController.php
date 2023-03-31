@@ -62,55 +62,36 @@ class CustomAuthController extends Controller
         return redirect(route('blog.index'))->withSuccess('User registered');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $user)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user)
-    {
-        //
-    }
 
     public function authentication(Request $request){
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email|exists:users',
             'password' => 'required'
         ]);
+
+        $credentials = $request->only('email', 'password');
+
+       if(!Auth::validate($credentials)):
+            return redirect(route('login'))->withErrors(trans('auth.password'))->withInput();
+       endif;
+
+       $user = Auth::getProvider()->retrieveByCredentials($credentials);
+     
+       Auth::login($user);
+
+       return redirect()->intended(route('user.list'));
+
+    }
+    public function logout(){
+        Auth::logout();
+        return redirect(route('login'));
+    }
+
+    public function userList() {
+        $users = User::select('id','name', 'email')
+                ->orderby('name')
+                ->paginate(10);
+
+        return view('auth.user-list', ['users' => $users]);
     }
 }

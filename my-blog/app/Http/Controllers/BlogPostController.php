@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class BlogPostController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -44,7 +48,7 @@ class BlogPostController extends Controller
        $blogPost = BlogPost::create([
             'title' => $request->title,
             'body' => $request->body,
-            'user_id' => 1
+            'user_id' => Auth::user()->id
        ]);
 
     return redirect(route('blog.show', $blogPost->id))->withSuccess('Post inserted');

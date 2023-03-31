@@ -8,6 +8,27 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Hello {{ Auth::user()->name ?? 'Guest'  }}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+                @guest
+                <a class="nav-link" href="{{route('auth.create')}}">Registration</a>
+                <a class="nav-link" href="{{route('login')}}">Login</a>
+                @else
+                <a class="nav-link" href="{{route('user.list')}}">Users</a>
+                <a class="nav-link" href="{{route('blog.index')}}">Blogs</a>
+                <a class="nav-link" href="{{route('logout')}}">Logout</a>
+                @endguest
+        </div>
+        </div>
+    </div>
+    </nav>
+
     <div class="container">
         @if(session('success'))
         <div class="row justify-content-center mt-2 mb-1">
