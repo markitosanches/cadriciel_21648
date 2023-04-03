@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,13 @@ class BlogPostController extends Controller
      */
     public function create()
     {
+        //$categories = new Category;
+        //$categories = $categories->categorySelect();
+
+        $categories = Category::categorySelect();
+
+        return $categories;
+
         return view('blog.create');
     }
 
