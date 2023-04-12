@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogPostController;
+use App\Http\Controllers\CustomAuthController;
+use App\Http\Controllers\LocalizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,8 +20,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-use App\Http\Controllers\BlogPostController;
-use App\Http\Controllers\CustomAuthController;
 
 Route::get('blog', [BlogPostController::class, 'index'])->name('blog.index');
 Route::get('blog/{blogPost}', [BlogPostController::class, 'show'])->name('blog.show');
@@ -39,4 +40,4 @@ Route::get('logout', [CustomAuthController::class, 'logout'])->name('logout');
 
 Route::get('user-list', [CustomAuthController::class, 'userList'])->name('user.list')->middleware('auth');
 
-
+Route::get('lang/{locale}', [LocalizationController::class, 'index'])->name('lang');

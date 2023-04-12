@@ -38,9 +38,9 @@ class BlogPostController extends Controller
 
         $categories = Category::categorySelect();
 
-        return $categories;
+        //return $categories;
 
-        return view('blog.create');
+        return view('blog.create', ['categories' => $categories]);
     }
 
     /**
@@ -56,7 +56,8 @@ class BlogPostController extends Controller
        $blogPost = BlogPost::create([
             'title' => $request->title,
             'body' => $request->body,
-            'user_id' => Auth::user()->id
+            'user_id' => Auth::user()->id,
+            'categories_id' => $request->categories_id
        ]);
 
     return redirect(route('blog.show', $blogPost->id))->withSuccess('Post inserted');
@@ -87,7 +88,9 @@ class BlogPostController extends Controller
      */
     public function edit(BlogPost $blogPost)
     {
-        return view('blog.edit', ['blogPost' => $blogPost]);
+        $categories = Category::categorySelect();
+
+        return view('blog.edit', ['blogPost' => $blogPost, 'categories' => $categories]);
     }
 
     /**
@@ -101,7 +104,8 @@ class BlogPostController extends Controller
     {
         $blogPost->update([
             'title' => $request->title,
-            'body' => $request->body
+            'body' => $request->body,
+            'categories_id' => $request->categories_id
         ]);
 
         return redirect(route('blog.show', $blogPost->id))->withSuccess('Post updated');

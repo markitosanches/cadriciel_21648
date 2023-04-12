@@ -16,11 +16,15 @@ class BlogPost extends Model
     protected $fillable = [
         'title',
         'body',
-        'user_id'
+        'user_id',
+        'categories_id'
     ];
 
     public function blogHasUser(){
         return $this->hasOne('App\Models\User', 'id', 'user_id');
     }
 
+    public function blogHasCategory(){
+        return $this->hasOne('App\Models\Category', 'id', 'categories_id');
+    }
 }

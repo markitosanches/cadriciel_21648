@@ -12,6 +12,10 @@
                 <p>
                     Author : {{ $blogPost->blogHasUser->name }}
                 </p>
+                <p>
+                  Category: {{ $blogPost->blogHasCategory->category ?? 'Aucune categorie'}}
+                  {{-- $blogPost->blogHasCategory?->category --}}
+                </p>
             <hr>
         </div>
     </div>
