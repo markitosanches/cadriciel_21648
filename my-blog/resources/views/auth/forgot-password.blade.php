@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Login')
+@section('title', 'Forgot Password')
 @section('content')
 <div class="container">
     <div class="row mt-5 justify-content-center">
@@ -15,26 +15,19 @@
             </div>
             @endif
             <div class="card">
-                <form action="{{route('authentication')}}" method="post">
+                <form method="post">
                     @csrf
                     <div class="card-header text-center">
-                        <h1 class="display-6">Login</h1>
+                        <h1 class="display-6">Forgot Password</h1>
                     </div>
                     <div class="card-body">
                         <div class="form-group mb-3">
                             <label for="email">Email</label>
                             <input type="email" name="email" id="email" class="form-control" value="{{old('email')}}">
                         </div>
-                        <div class="form-group mb-3">
-                            <label for="password">Password</label>
-                            <input type="password" name="password" id="password" class="form-control">
-                        </div>
-                        <div>
-                            <a href="{{ route('forgot-password')}}">Forgot Password</a>
-                        </div>
                     </div>
                     <div class="card-footer text-center">
-                            <input type="submit" value="Login" class="btn btn-primary">
+                            <input type="submit" value="Reset password" class="btn btn-primary">
                     </div>
                 </form>
             </div>

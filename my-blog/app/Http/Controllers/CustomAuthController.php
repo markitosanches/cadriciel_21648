@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class CustomAuthController extends Controller
 {
@@ -58,6 +60,17 @@ class CustomAuthController extends Controller
         //user->fill TABLE USER col (name, email, password, reset_pass)
         //requestAll (inputs) ( name,  password, email, _token)
 
+        $to_email = $request->email;
+        $to_name = $request->name;
+
+        $body = "Welcome to my-blog please <a href='#'>cliquez ici pour confirmer cotre compte</a>";
+
+        Mail::send('email.mail', ['name' => $to_name, 
+                                'body' => $body],
+                            
+            function($message) use ($to_name, $to_email){
+                $message->to($to_email, $to_name)->subject('Courriel de test laravel');
+            });
 
         return redirect(route('blog.index'))->withSuccess('User registered');
     }
@@ -94,4 +107,72 @@ class CustomAuthController extends Controller
 
         return view('auth.user-list', ['users' => $users]);
     }
+
+    public function forgotPassword(){
+        return view('auth.forgot-password');
+    }
+
+    public function tempPassword(Request $request){
+        $request->validate([
+            'email' => 'required|email|exists:users'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        $tempPassword = Str::random(45);
+
+        $user->temp_password = $tempPassword;
+        $user->save();
+
+        //new-password/user_id/temp_password
+
+        $body = "Please click to <a href='".route('new-password', [$user->id, $tempPassword])."'>Reset Password</a>";
+    
+        $to_name = $user->name;
+        $to_email = $user->email;
+
+        Mail::send('email.mail', ['name' => $to_name, 
+                                'body' => $body],
+                            
+            function($message) use ($to_name, $to_email){
+                $message->to($to_email, $to_name)->subject('Resety Password');
+            });
+        
+        return redirect()->back()->withSuccess('Please check your email');
+
+    }
+
+    public function newPassword(User $user, $tempPassword){
+
+       if($tempPassword === $user->temp_password){
+
+        return view('auth.new-password');
+
+       }
+
+        return redirect(route('login'))->withErrors('Invalid temporary password');
+
+    }
+
+    public function updateNewPassword(User $user, $tempPassword, Request $request){
+
+        if($tempPassword === $user->temp_password){
+            
+            $request->validate([
+                'password' => 'max:20|min:6|confirmed'
+            ]);
+
+            $user->password = Hash::make($request->password);
+            $user->temp_password = null;
+            $user->save();
+            return redirect(route('login'))->withSuccess('New Password Success');
+
+        // return view('auth.new-password');
+ 
+        }
+ 
+         return redirect(route('login'))->withErrors('Invalid temporary password');
+ 
+     }
+
 }
