@@ -29,6 +29,7 @@ Route::get('blog-edit/{blogPost}', [BlogPostController::class, 'edit'])->name('b
 Route::put('blog-edit/{blogPost}', [BlogPostController::class, 'update']);
 Route::delete('blog/{blogPost}', [BlogPostController::class, 'destroy']);
 Route::get('page', [BlogPostController::class, 'page']);
+Route::get('blog-pdf/{blogPost}', [BlogPostController::class, 'showPdf'])->name('blog.show.pdf');
 
 Route::get('query', [BlogPostController::class, 'query']);
 

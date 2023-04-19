@@ -19,11 +19,14 @@
             <hr>
         </div>
     </div>
-    <div class="row text-center">
-        <div class="col-md-6">
+    <div class="row text-center mb-5">
+       <div class="col-md-4">
+          <a href="{{ route('blog.show.pdf', $blogPost->id)}}" class="btn btn-warning btn-sm">PDF</a>
+       </div>
+        <div class="col-md-4">
             <a href="{{ route('blog.edit', $blogPost->id)}}" class="btn btn-success btn-sm">Modifier</a>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
                 <input type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalDelete" value="Effacer">
         </div>
     </div>
